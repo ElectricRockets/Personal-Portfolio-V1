@@ -1474,3 +1474,37 @@ input[type="text"] {
 }
 
 /*# sourceMappingURL=style.css.map */
+.fh5co-nav .top-menu .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* remove the default negative gutters */
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* override the Bootstrap cols in this row so they size to content */
+.fh5co-nav .top-menu .col-xs-2,
+.fh5co-nav .top-menu .col-xs-10 {
+  width: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* make sure the logo never wraps */
+#fh5co-logo {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* ensure your menu ul items line up horizontally */
+.fh5co-nav .menu-1 > ul {
+  display: flex;
+  margin: 0;    /* kill the default UL margins */
+  padding: 0;
+}
+
+/* tighten up the li spacing if you want */
+.fh5co-nav .menu-1 li {
+  margin: 0 0.5em;
+}
