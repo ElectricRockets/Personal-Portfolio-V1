@@ -27,6 +27,7 @@ body {
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;
+  padding-top: 90px;
 }
 .offcanvas #page {
   overflow: hidden;
@@ -97,11 +98,17 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .fh5co-nav {
-  margin: 5em 0 0 0;
+  /*margin: 5em 0 0 0; */
+  position: fixed;      /* Fix the navbar to the viewport */
+  top: 0;               /* Position it at the top */
+  left: 0;              /* Align to the left edge */
+  right: 0;             /* Align to the right edge (makes it full width) */
+  z-index: 1030;        /* Ensure it stays on top (Bootstrap's default for navbars) */
+  background: #fff;     /* Add a background color so content doesn't show through */
 }
 @media screen and (max-width: 768px) {
   .fh5co-nav {
-    margin: 0;
+    /*margin: 0;*/
   }
 }
 .fh5co-nav .top-menu {
