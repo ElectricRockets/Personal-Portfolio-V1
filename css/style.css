@@ -134,11 +134,11 @@ h1, h2, h3, h4, h5, h6, figure {
   padding: 5px 10px;
   color: #000;
 }
-/*@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .fh5co-nav .menu-1 {
     display: none;
   }
-}*/ Adding the menu back on small screens
+}
 .fh5co-nav ul {
   padding: 0;
   margin: 5px 0 0 0;
@@ -1243,11 +1243,15 @@ input[type="text"] {
   z-index: 2001;
   border-bottom: none !important;
 }
-/*@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .fh5co-nav-toggle {
     display: block;
+    position: fixed; /* CHANGE THIS to fixed */
+    top: 25px;       /* ADJUST: Position from the top of the viewport */
+    right: 1em;      /* ADJUST: Position from the right (matches mobile padding) */
+    z-index: 2001;   /* Ensure it stays above the nav bar background */
   }
-}*/ removes hamburger icon from appearing
+}
 
 .btn {
   margin-right: 4px;
