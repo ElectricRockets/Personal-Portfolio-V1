@@ -1480,4 +1480,23 @@ input[type="text"] {
   font-weight: 400;
 }
 
+@media (max-width: 767px) {
+  /* Target the specific image using IDs and classes */
+  #fh5co-work .author .col-md-4 img.img-responsive {
+    max-width: 250px !important;  /* <<< SET MAX WIDTH (Adjust 250px if needed) */
+    width: auto !important;       /* Allow natural width up to the max-width */
+    height: auto !important;      /* Ensure height scales correctly */
+    display: block !important;    /* Ensure it's a block for centering */
+    margin-left: auto !important; /* Center the image block */
+    margin-right: auto !important;/* Center the image block */
+    float: none !important;       /* Ensure it's not floated */
+  }
+
+  /* Ensure the text column still takes full width when stacked */
+   #fh5co-work .author .row > .col-md-8 {
+     width: 100%;
+     float: none;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */
