@@ -98,7 +98,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .fh5co-nav {
-  /*margin: 5em 0 0 0; */
+  /*margin: 5em 0 0 0;*/
   position: fixed !important;      /* Fix the navbar to the viewport */
   top: 0;               /* Position it at the top */
   left: 0;              /* Align to the left edge */
@@ -112,7 +112,11 @@ h1, h2, h3, h4, h5, h6, figure {
   }
 }
 .fh5co-nav .top-menu {
-  padding: 34px 30px;
+  padding: 30px 30px;
+}
+.fh5co-nav .top-menu .row {
+  display: flex;
+  align-items: center;
 }
 @media screen and (max-width: 768px) {
   .fh5co-nav .top-menu {
@@ -141,7 +145,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 .fh5co-nav ul {
   padding: 0;
-  margin: 5px 0 0 0;
+  margin: 0;
 }
 .fh5co-nav ul li {
   font-family: "Source Sans Pro", sans-serif;
