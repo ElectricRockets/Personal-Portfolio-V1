@@ -923,10 +923,6 @@ h1, h2, h3, h4, h5, h6, figure {
   border: 2px solid rgba(0, 0, 0, 0.8);
 }
 
-input[type="text"] {
-  height: 50px;
-}
-
 .form-group {
   margin-bottom: 30px;
 }
@@ -1111,6 +1107,13 @@ input[type="text"] {
   -ms-transform: rotate(-180deg);
   -o-transform: rotate(-180deg);
   transform: rotate(-180deg);
+}
+#fh5co-offcanvas ul li a {
+  font-size: 24px; /* Adjust this value as needed (e.g., 16px, 20px) */
+  padding: 16px 0; /* Optional: Add more vertical padding for better touch targets */
+  line-height: 2; /* Optional: Adjust line height for better readability */
+  /* You might want slightly higher contrast for larger text */
+  /* color: rgba(255, 255, 255, 0.7); */
 }
 
 .gototop {
