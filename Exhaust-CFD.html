@@ -76,12 +76,59 @@
 					<div class="col-md-8 fh5co-project-detail">
 						<h2 class="fh5co-project-title">Exhaust Manifold Acoustic CFD</h2>
 						<span class="fh5co-project-sub">Formula SAE</span>		
+						
+						<h2>Problem</h2>
+						<p>The Oregon Tech FSAE car narrowly met the 110 dB sound limit in 2024 but suffered high backpressure at idle, compromising drivability and engine performance. Based on testing without a muffler, a 16 dB reduction in exhaust noise was required while adding minimal backpressure. Balancing acoustic attenuation with flow restriction drove the need for a performance-driven muffler design study using a high speed transient CFD  simulation to allow acoustic analysis.</p>
+						
+						<h2>Solution Idea</h2>
+						<p>I developed a transient CFD case design to evaluate six exhaust configurations: the unmodified straight pipe, single and dual quarter-wave resonators, an expansion chamber, a perforated reflector, and a simple outlet diameter restrictor. Each design targets specific harmonics or broadband attenuation, quantifying trade-offs with sound pressure level (dB SPL), mean effective backpressure, and recycled exhaust fraction.</p>
+						
+						<h2>Meshing</h2>
+						<p>An unstructured polyhedral mesh with prism layers captured boundary-layer gradients and acoustic wave propagation. Key parameters: 3.5 mm target face size on internal walls, 20-point circular discretization, 1.1 volume growth rate, and three prism layers tuned for y+≈100. The mesh ranged from 200k to 450k cells depending on design complexity, with coarser cells in the outlet region to dissipate sound emissions. Mesh independence was verified for backpressure and exhaust recycling changed by &lt;2% when refining mesh size. SPL was slightly higher with the finer mesh, adding ~2.5 dB due to some high-frequency attenuation in the standard mesh.</p>
+						
+						<h2>Simulation Settings</h2>
+						<p>We performed transient RANS using the SST k–e turbulence model to resolve freestream tubulent interactions for flow restriction. The ideal gas law represented stoichiometric exhaust, with adiabatic no-slip walls. A fixed time step of 1×10⁻⁵ s was chosen to resolve harmonics up to ~50 kHz and ensure numerical stability. Simulations ran until periodic behavior was present, then for five engine cycles at 11 000 RPM (~0.0545 s) to collect time-averaged behavior, using convergence criteria of 1×10⁻⁴ on residuals, ±0.001 kg/s on mass flow, and 0.1 Pa on acoustic pressure.</p>
+						
+						<h2>Custom Scripted Inlet Boundary Condition</h2>
+						<p>A user-defined function (UDF) imposed time-varying cylinder pressure at the inlet, using boundary flows rates to calculate the cylinder pressure at each timestep. When the exhaust valve was closed, the inlet switched to a stationary wall boundary, accurately capturing acoustic source timing without explicit moving-mesh models.</p>
+						
+						<h2>Test Cases</h2>
+						<section>
+							<h3>Straight Pipe (Control)</h3>
+							<p><strong>Design idea:</strong> Baseline stock geometry without modifications.<br>
+							<strong>Results:</strong> SPL = 125.7 dB; ΔP = 49.15 kPa; recycled = 2.88%.</p>
+						</section>
+						<section>
+							<h3>Single Quarter-Wave Resonator</h3>
+							<p><strong>Design idea:</strong> 179 mm resonator tuned to the highest amplitude 734 Hz second harmonic, placed at a calculated pressure antinode.<br>
+							<strong>Results:</strong> SPL = 119.4 dB (–6.3 dB); ΔP = 50.49 kPa (+1.34 kPa); recycled = 2.79%.</p>
+						</section>
+						<section>
+							<h3>Dual Quarter-Wave Resonators</h3>
+							<p><strong>Design idea:</strong> Added a second resonator (491 mm) targeting the 275 Hz second harmonic, placed at a calculated pressure antinode.<br>
+							<strong>Results:</strong> SPL = 117.7 dB (–8.0 dB); ΔP = 50.51 kPa (+1.36 kPa); recycled = 2.81%.</p>
+						</section>
+						<section>
+							<h3>Expansion Chamber</h3>
+							<p><strong>Design idea:</strong> Large chamber without a direct inlet-outlet path for broadband attenuation via multiple reflections.<br>
+							<strong>Results:</strong> SPL = 103.1 dB (–22.6 dB); ΔP = 64.13 kPa (+14.98 kPa); recycled = 3.30%.</p>
+						</section>
+						<section>
+							<h3>Perforated Reflector</h3>
+							<p><strong>Design idea:</strong> Angled perforated panel reflecting ~66% of incident acoustic energy while maintaining smooth flow.<br>
+							<strong>Results:</strong> SPL = 118.2 dB (–7.5 dB); ΔP = 54.40 kPa (+5.25 kPa); recycled = 2.63%.</p>
+						</section>
+						<section>
+							<h3>Simple Outlet Restrictor</h3>
+							<p><strong>Design idea:</strong> Halved outlet diameter to mimic baffles used last year, acting as a flow-restrictor.<br>
+							<strong>Results:</strong> SPL = 116.4 dB (–9.3 dB); ΔP = 205.19 kPa (+156.04 kPa); recycled = 6.31%.</p>
+						</section>
+						
+						<h2>Overall Results</h2>
+						<p>Resonator configurations offered 6–8 dB noise reduction for only ~1.3 kPa backpressure penalty (~5–6 dB/kPa). The expansion chamber achieved the largest attenuation (–22.6 dB) but at a significant cost (+15 kPa), while the perforated reflector balanced moderate attenuation with acceptable flow restriction. The simple restrictor, though effective for noise, induced prohibitive backpressure.</p>
 
-						<p>The OIT Formula SAE team faced challenges with their previous car, barely passing the competition's sound level requirements and experiencing engine idling issues due to high exhaust backpressure. To improve performance and ensure compliance, a new exhaust solution was needed that could significantly reduce noise without overly restricting engine power.</p>
-						<p>The core idea was to use computer simulations to explore various exhaust system designs before physical prototyping. By modeling different types of sound-reducing components like resonators and mufflers, we could predict their impact on both noise levels and engine backpressure.<p>
-						<p>Using Ansys Fluent Computational Fluid Dynamics (CFD) software, we simulated several exhaust geometries attached to the base manifold. These included a straight pipe (baseline), single and dual resonators tuned to specific problem frequencies, an expansion chamber muffler, and a perforated reflector muffler. For each simulation, we measured the predicted Sound Pressure Level (SPL) at the standard FSAE test point and the average cylinder backpressure.<p>
-						<p>The simulations revealed a clear trade-off: designs offering the most sound reduction often created the most backpressure. For instance, the expansion chamber achieved a large 22.6 dB noise drop but added a significant 14.98 kPa of backpressure. Conversely, the single resonator was very efficient, reducing noise by 6.3 dB while only increasing backpressure by 1.34 kPa, primarily targeting the loudest frequency.<p>
-						<p>Based on the results, a hybrid design was recommended. Combining a resonator to efficiently tackle the main problematic frequency with an expansion chamber to handle broader noise reduction offers the best balance. This approach aims to meet the required sound level reduction while mitigating the significant backpressure penalty associated with using only a high-restriction muffler.<p>
+						<h2>Conclusion</h2>
+						<p>A hybrid solution—tuned quarter-wave resonators for the dominant engine harmonics paired with a compact expansion chamber for broadband suppression should deliver over 16 dB of attenuation with significantly less backpressure than previous years. Future teams should be able to use this analysis to inform a custom muffler design. Additionally, the CFD methodology and custom UDF boundary conditions provide a robust framework for future exhaust acoustic optimizations.</p>
 						
 						<a href="https://oregontech-my.sharepoint.com/:p:/g/personal/brody_miller_oit_edu/EbNhqrtLY65LuahmtKmlCtQB2pcqSWDLUPpCcqOCkpH9ng?e=k6GRke" class="h4">Project Summary Presentation</a>
 						
