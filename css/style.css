@@ -1490,6 +1490,16 @@ h1, h2, h3, h4, h5, h6, figure {
   color: rgba(0, 0, 0, 0.3);
   font-weight: 400;
 }
+.fh5co-project-detail img.img-responsive {
+  max-width: 60%; /* Adjust percentage as needed (e.g., 80%, 70%) */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Ensure block display for centering */
+  margin-left: auto; /* Center the image */
+  margin-right: auto; /* Center the image */
+  /* Keep existing inline styles */
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
 
 @media (max-width: 767px) {
   /* Target the specific image using IDs and classes */

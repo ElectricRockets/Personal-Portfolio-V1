@@ -62,17 +62,6 @@
 		<div id="fh5co-work">
 			<div class="container">		
 				<div class="row">
-					<!-- <div class="col-md-8">
-						<a href="images/portfolio-1.jpg" class="image-popup img-portfolio-detail">
-							<img src="images/portfolio-1.jpg" alt="Free HTML5 Template by FreeHTML5.co" class="img-responsive">
-						</a>
-						<a href="images/portfolio-2.jpg" class="image-popup img-portfolio-detail">
-							<img src="images/portfolio-2.jpg" alt="Free HTML5 Template by FreeHTML5.co" class="img-responsive">
-						</a>
-						<a href="images/portfolio-3.jpg" class="image-popup img-portfolio-detail">
-							<img src="images/portfolio-3.jpg" alt="Free HTML5 Template by FreeHTML5.co" class="img-responsive">
-						</a>
-					</div> -->
 					<div class="col-md-8 fh5co-project-detail">
 						<h2 class="fh5co-project-title">Exhaust Manifold Acoustic CFD</h2>
 						<span class="fh5co-project-sub">Formula SAE</span>		
@@ -80,55 +69,73 @@
 						<h2>Problem</h2>
 						<p>The Oregon Tech FSAE car narrowly met the 110 dB sound limit in 2024 but suffered high backpressure at idle, compromising drivability and engine performance. Based on testing without a muffler, a 16 dB reduction in exhaust noise was required while adding minimal backpressure. Balancing acoustic attenuation with flow restriction drove the need for a performance-driven muffler design study using a high speed transient CFD  simulation to allow acoustic analysis.</p>
 						
-						<h2>Solution Idea</h2>
-						<p>I developed a transient CFD case design to evaluate six exhaust configurations: the unmodified straight pipe, single and dual quarter-wave resonators, an expansion chamber, a perforated reflector, and a simple outlet diameter restrictor. Each design targets specific harmonics or broadband attenuation, quantifying trade-offs with sound pressure level (dB SPL), mean effective backpressure, and recycled exhaust fraction.</p>
+						<h2>Analysis</h2>
+						<h3>Concept</h3>
+						<p>The general idea for this analysis is that most of the sound energy is produced through the large scale pressure waves from the engine, and relatively little is produced by the turbulence in the flow. This assumption is necessary, as modeling the aeroacoustics of the flow would have required much finer grids and timesteps, resulting in drastically longer computation times. In this case, a URANS formulation is used to solve for how large pressure waves propagate through the exhaust system, while also providing an accurate solution for the bulk flow properties.</p>
+						<h3>Geometry</h3>
+						<p>The geometry is based on the new header design, based on previous results and information from various academic papers. The internal volume is then connected to a large outlet region. This region surrounds the outlet, extending 2m lengthwize with a 1.5m diameter. This allows for mesh refinementh out to the 0.5m test distance, along with enough room for large cells near the outer surface to dissipate acoustic energy.</p>
+						<img src="images/projects/Exhaust-CFD/Standard-Geometry.png" alt="Standard simulation geometry" class="img-responsive">
 						
-						<h2>Meshing</h2>
-						<p>An unstructured polyhedral mesh with prism layers captured boundary-layer gradients and acoustic wave propagation. Key parameters: 3.5 mm target face size on internal walls, 20-point circular discretization, 1.1 volume growth rate, and three prism layers tuned for y+≈100, allowing modeled boundary layers to achieve accurate results. The mesh ranged from 200k to 450k cells depending on design complexity, with coarser cells in the outlet region to dissipate sound emissions. Mesh independence was verified for backpressure and exhaust recycling changed by &lt;2% when refining mesh size. SPL was slightly higher with the finer mesh, adding ~2.5 dB due to some high-frequency attenuation in the standard mesh.</p>
+						<h3>Meshing</h3>
+						<p>An unstructured polyhedral mesh with prism layers capturs the boundary-layer gradients and acoustic wave propagation. Key parameters: 3.5 mm target internal surface size, 20-point circular discretization, 1.1 volume growth rate, and three prism layers tuned for y+ ≈ 100, allowing modeled boundary layers to achieve accurate results. The mesh ranged from 200k to 450k cells depending on design complexity, with coarse cells up to 0.25m in the outlet region to dissipate sound emissions. Mesh independence was verified for backpressure and exhaust recycling changed by &lt;2% when refining mesh size. SPL was slightly higher with the finer mesh, adding ~2.5 dB due to some high-frequency attenuation in the standard mesh.</p>
+						<img src="images/projects/Exhaust-CFD/Standard-Mesh.png" alt="Standard simulation mesh results" class="img-responsive">
 						
-						<h2>Simulation Settings</h2>
-						<p>We performed transient RANS using the SST k–e turbulence model to resolve freestream tubulent interactions for flow restriction. The ideal gas law represented stoichiometric exhaust, with adiabatic no-slip walls. A fixed time step of 1×10⁻⁵ s was chosen to resolve harmonics up to ~50 kHz and ensure numerical stability. Simulations ran until periodic behavior was present, then for five engine cycles at 11 000 RPM (~0.0545 s) to collect time-averaged behavior, using convergence criteria of 1×10⁻⁴ on residuals, ±0.001 kg/s on mass flow, and 0.1 Pa on acoustic pressure.</p>
+						<h3>Simulation Settings</h3>
+						<p>The simulation was performed with the k–e turbulence model to resolve freestream tubulent interactions for flow restriction. The ideal gas law represented stoichiometric exhaust, with adiabatic no-slip walls. A fixed time step of 10 microseconds was chosen to resolve harmonics up to ~50 kHz and ensure numerical stability. Simulations ran until periodic behavior was present, then for five engine cycles at 11,000 RPM (~0.0545 s) to collect time-averaged behavior. To estimate time step convergence, criteria of 1×10⁻⁴ on all residuals, ±0.001 kg/s on mass flow, and 0.1 Pa on acoustic pressure were required for time step completion.</p>
 						
-						<h2>Custom Scripted Inlet Boundary Condition</h2>
-						<p>A user-defined function (UDF) imposed time-varying cylinder pressure at the inlet, using boundary flows rates to calculate the cylinder pressure at each timestep. When the exhaust valve was closed, the inlet switched to a stationary wall boundary, accurately capturing acoustic source timing without explicit moving-mesh models.</p>
+						<h3>Custom Scripted Inlet Boundary Condition</h3>
+						<p>A scheme script was used to impose time-varying cylinder pressure at the inlet, using boundary flows rates to calculate the cylinder pressure at each timestep. When the exhaust valve was closed, the inlet switched to a stationary wall boundary, accurately capturing acoustic source timing without the complexity of moving-mesh models.</p>
+						<img src="images/projects/Exhaust-CFD/Inlet-Boundary-Condition.png" alt="Inlet boundary condition diagram" class="img-responsive" style="max-width: 90%;">
 						
 						<h2>Test Cases</h2>
 						<section>
 							<h3>Straight Pipe (Control)</h3>
 							<p><strong>Design idea:</strong> Baseline stock geometry without modifications.<br>
 							<strong>Results:</strong> SPL = 125.7 dB; ΔP = 49.15 kPa; recycled = 2.88%.</p>
+							<img src="images/projects/Exhaust-CFD/Straight-Pipe-FFT.png" alt="FFT of Straight Pipe sound results" class="img-responsive">
 						</section>
 						<section>
 							<h3>Single Quarter-Wave Resonator</h3>
-							<p><strong>Design idea:</strong> 179 mm resonator tuned to the highest amplitude 734 Hz second harmonic, placed at a calculated pressure antinode.<br>
+							<p><strong>Design idea:</strong> 179 mm resonator tuned to the highest amplitude 734 Hz eighth harmonic, placed at a calculated pressure antinode.<br>
 							<strong>Results:</strong> SPL = 119.4 dB (–6.3 dB); ΔP = 50.49 kPa (+1.34 kPa); recycled = 2.79%.</p>
+							<img src="images/projects/Exhaust-CFD/Single-Resonator-Design.png" alt="Single Resonator design" class="img-responsive">
+							<img src="images/projects/Exhaust-CFD/Single-Resonator-FFT.png" alt="FFT of Single Resonator sound results" class="img-responsive">
 						</section>
 						<section>
 							<h3>Dual Quarter-Wave Resonators</h3>
-							<p><strong>Design idea:</strong> Added a second resonator (491 mm) targeting the 275 Hz second harmonic, placed at a calculated pressure antinode.<br>
+							<p><strong>Design idea:</strong> Added a second resonator (491 mm) targeting the 275 Hz third harmonic, placed at a calculated pressure antinode.<br>
 							<strong>Results:</strong> SPL = 117.7 dB (–8.0 dB); ΔP = 50.51 kPa (+1.36 kPa); recycled = 2.81%.</p>
+							<img src="images/projects/Exhaust-CFD/Dual-Resonator-Design.png" alt="Dual Resonator design" class="img-responsive">
+							<img src="images/projects/Exhaust-CFD/Dual-Resonator-FFT.png" alt="FFT of Dual Resonator sound results" class="img-responsive">
 						</section>
 						<section>
 							<h3>Expansion Chamber</h3>
 							<p><strong>Design idea:</strong> Large chamber without a direct inlet-outlet path for broadband attenuation via multiple reflections.<br>
-							<strong>Results:</strong> SPL = 103.1 dB (–22.6 dB); ΔP = 64.13 kPa (+14.98 kPa); recycled = 3.30%.</p>
+							<strong>Results:</strong> SPL = 103.1 dB (–22.6 dB); ΔP = 64.13 kPa (+14.98 kPa); recycled = 3.30%.<br>
+							<p>Please note the different scale due to the significant sound reduction.</p>
+							<img src="images/projects/Exhaust-CFD/Expansion-Chamber-Design.png" alt="Expansion Chamber design" class="img-responsive">
+							<img src="images/projects/Exhaust-CFD/Expansion-Chamber-FFT.png" alt="FFT of Expansion Chamber sound results" class="img-responsive">
 						</section>
 						<section>
 							<h3>Perforated Reflector</h3>
-							<p><strong>Design idea:</strong> Angled perforated panel reflecting ~66% of incident acoustic energy while maintaining smooth flow.<br>
+							<p><strong>Design idea:</strong> Angled perforated panel designed to reflect ~66% of acoustic energy.<br>
 							<strong>Results:</strong> SPL = 118.2 dB (–7.5 dB); ΔP = 54.40 kPa (+5.25 kPa); recycled = 2.63%.</p>
+							<img src="images/projects/Exhaust-CFD/Perforated-Reflector-Design.png" alt="Perforated Reflector design" class="img-responsive">
+							<img src="images/projects/Exhaust-CFD/Perforated-Reflector-FFT.png" alt="FFT of Perforated Reflector sound results" class="img-responsive">
 						</section>
 						<section>
 							<h3>Simple Outlet Restrictor</h3>
 							<p><strong>Design idea:</strong> Halved outlet diameter to mimic baffles used last year, acting as a flow-restrictor.<br>
 							<strong>Results:</strong> SPL = 116.4 dB (–9.3 dB); ΔP = 205.19 kPa (+156.04 kPa); recycled = 6.31%.</p>
+							<img src="images/projects/Exhaust-CFD/Restrictor-FFT.png" alt="FFT of Restrictor sound results" class="img-responsive">
 						</section>
 						
 						<h2>Overall Results</h2>
-						<p>Resonator configurations offered 6–8 dB noise reduction for only ~1.3 kPa backpressure penalty (~5–6 dB/kPa). The expansion chamber achieved the largest attenuation (–22.6 dB) but at a significant cost (+15 kPa), while the perforated reflector balanced moderate attenuation with acceptable flow restriction. The simple restrictor, though effective for noise, induced prohibitive backpressure.</p>
+						<p>Resonator configurations offered 6–8 dB noise reduction for only ~1.3 kPa backpressure penalty (~5–6 dB/kPa). The expansion chamber achieved the largest attenuation (–22.6 dB) but at a significant cost (+15 kPa), while the perforated reflector balanced moderate attenuation with acceptable flow restriction. The simple restrictor, though effective for noise, induced prohibitive backpressure as expected.</p>
+						<img src="images/projects/Exhaust-CFD/Overall-Results.png" alt="Table of overall simulation results" class="img-responsive">
 
 						<h2>Conclusion</h2>
-						<p>A hybrid solution—tuned quarter-wave resonators for the dominant engine harmonics paired with a compact expansion chamber for broadband suppression should deliver over 16 dB of attenuation with significantly less backpressure than previous years. Future teams should be able to use this analysis to inform a custom muffler design. Additionally, the CFD methodology and custom UDF boundary conditions provide a robust framework for future exhaust acoustic optimizations.</p>
+						<p>A hybrid solution, tuned quarter-wave resonators for the dominant engine harmonics paired with a compact expansion chamber for broadband suppression should deliver well over 16 dB of attenuation with significantly less backpressure than previous years. Future teams should be able to use this analysis to inform a custom muffler design. Additionally, the CFD methodology and custom boundary conditions provide a robust framework for future exhaust acoustic optimizations.</p>
 						
 						<a href="https://oregontech-my.sharepoint.com/:p:/g/personal/brody_miller_oit_edu/EbNhqrtLY65LuahmtKmlCtQB2pcqSWDLUPpCcqOCkpH9ng?e=k6GRke" class="h4">Project Summary Presentation</a>
 						
